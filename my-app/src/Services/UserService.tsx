@@ -1,8 +1,5 @@
-import { IUserDto } from '../Dtos/UserDto';
-import axios from 'axios';
 import { serverUrl } from '../components/http';
 import api from '../components/http';
-import { IAuthResponseModel } from '../Models/AuthResponseModel';
 import { IUserModel } from '../Models/UserModel';
 
 

@@ -17,7 +17,6 @@ class AuthService {
 
     async login(user: IUserDto): Promise<IUserResult> {
         try {
-            console.log('call')
             const accessToken = await api.post<IAuthResponseModel>('/user/login', user);
             localStorage.setItem('token', accessToken.data.accessToken);
             Cookies.set('refreshToken', accessToken.data.refreshToken);

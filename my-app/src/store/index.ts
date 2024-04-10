@@ -1,12 +1,14 @@
-import { applyMiddleware, combineReducers, configureStore } from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { tokenReducer } from './reducers/tokenReducer';
 import createSagaMiddleware from 'redux-saga';
 import { rootWatcher } from '../sagas';
+import { userReducer } from './reducers/userReducer';
 
 const sagaMiddleware = createSagaMiddleware();
 
 const rootReducer = combineReducers({
     token: tokenReducer,
+    user: userReducer,
 });
 
 export const setupStore = () => {

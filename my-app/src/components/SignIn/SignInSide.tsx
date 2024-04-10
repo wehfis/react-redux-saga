@@ -3,8 +3,7 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
+import { Navigate, redirect } from "react-router-dom";
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
@@ -12,13 +11,11 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { authApi } from '../../Services/AuthService';
 import { IUserDto } from '../../Dtos/UserDto';
 import { Alert, Snackbar } from '@mui/material';
-import { Navigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { loginRequest } from '../../store/reducers/tokenReducer';
-import { useAppDispatch } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { useSelector } from 'react-redux';
 
 function Copyright(props: any) {
     return (
@@ -47,6 +44,7 @@ export default function SignInSide() {
     }>({ severity: 'info', message: 'Pending Operation...' });
     const [open, setOpen] = React.useState(false);
     const dispatch = useAppDispatch();
+    const username = useAppSelector(state => state.user.username);
 
     const handleClick = () => {
         setOpen(true);
@@ -70,11 +68,16 @@ export default function SignInSide() {
             password: data.get('password')! as string,
         };
         dispatch(loginRequest(user.username, user.password));
+        console.log('login', username);
+        if (username) {
+            console.log('username', username);
+            return redirect('/home');
+        }
     };
 
-    // if (localStorage.getItem('token')) {
-    //     return <Navigate replace to="/home" />;
-    // }
+    if (localStorage.getItem('token')) {
+        return <Navigate replace to="/home" />;
+    }
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -147,15 +150,15 @@ export default function SignInSide() {
                                 id="password"
                                 autoComplete="current-password"
                             />
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                sx={{ mt: 3, mb: 2 }}
-                                onClick={handleClick}
-                            >
-                                Login
-                            </Button>
+                                <Button
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained"
+                                    sx={{ mt: 3, mb: 2 }}
+                                    onClick={handleClick}
+                                >
+                                    Login
+                                </Button>
                             <Grid container>
                                 <Grid item xs></Grid>
                                 <Grid item>
