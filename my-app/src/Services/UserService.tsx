@@ -1,8 +1,5 @@
-import { IUserDto } from '../Dtos/UserDto';
-import axios from 'axios';
 import { serverUrl } from '../components/http';
 import api from '../components/http';
-import { IAuthResponseModel } from '../Models/AuthResponseModel';
 import { IUserModel } from '../Models/UserModel';
 
 
@@ -21,10 +18,9 @@ class UserService {
     async getCurrentUser(): Promise<IUserModel> {
         try {
             const userData = await api.get<IUserModel>('/user/me');
-            console.log(userData.data)
             return userData.data;
         } catch (error: any) {
-            console.log(error.message);
+            localStorage.setItem('token', '');
             throw new Error(error.message);
         }
     }

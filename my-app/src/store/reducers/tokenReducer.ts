@@ -62,8 +62,6 @@ export const tokenReducer = (
             return { ...state, accessToken: action.payload.accessToken, refreshToken: action.payload.refreshToken, error: null };
         case ITokenActionType.AUTH_FAILURE:
             return { ...state, accessToken: null, error: action.payload };
-        case ITokenActionType.LOGOUT:
-            return { ...state, accessToken: null, refreshToken: null, error: null };
         default:
             return state;
     }
