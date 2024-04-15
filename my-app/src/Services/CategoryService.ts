@@ -15,10 +15,8 @@ class CategoryService {
             const categoryData = await api.get<ICategoryModel[]>(
                 `/categories/${board_id}`
             );
-            console.log(categoryData.data);
             return categoryData.data;
         } catch (error: any) {
-            console.log(error.message);
             throw new Error(error.message);
         }
     }
@@ -28,10 +26,8 @@ class CategoryService {
             const categoryData = await api.get<ICategoryModel>(
                 `/category/${id}`
             );
-            console.log(categoryData.data);
             return categoryData.data;
         } catch (error: any) {
-            console.log(error.message);
             throw new Error(error.message);
         }
     }
@@ -41,10 +37,8 @@ class CategoryService {
                 `/category`,
                 category
             );
-            console.log(categoryData.data);
             return categoryData.data;
         } catch (error: any) {
-            console.log(error.message);
             throw new Error(error.message);
         }
     }
@@ -57,10 +51,8 @@ class CategoryService {
                 `/category/${category_id}`,
                 newCategory
             );
-            console.log(categoryData.data);
             return categoryData.data;
         } catch (error: any) {
-            console.log(error.message);
             throw new Error(error.message);
         }
     }
@@ -69,10 +61,8 @@ class CategoryService {
             const categoryData = await api.delete<boolean>(
                 `/category/${category_id}`
             );
-            console.log(categoryData.data);
             return categoryData.data;
         } catch (error: any) {
-            console.log(error.message);
             throw new Error(error.message);
         }
     }

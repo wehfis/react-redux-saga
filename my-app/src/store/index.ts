@@ -3,12 +3,18 @@ import { tokenReducer } from './reducers/tokenReducer';
 import createSagaMiddleware from 'redux-saga';
 import { rootWatcher } from '../sagas';
 import { userReducer } from './reducers/userReducer';
+import { boardReducer } from './reducers/boardReducer';
+import { taskReducer } from './reducers/taskReducer';
+import { categoryReducer } from './reducers/categoryReducer';
 
 const sagaMiddleware = createSagaMiddleware();
 
 const rootReducer = combineReducers({
     token: tokenReducer,
     user: userReducer,
+    board: boardReducer,
+    category: categoryReducer,
+    task: taskReducer
 });
 
 export const setupStore = () => {

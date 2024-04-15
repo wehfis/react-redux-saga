@@ -6,13 +6,15 @@ import {
     createTheme,
     CssBaseline,
 } from '@mui/material';
-import { Link, Navigate, redirect } from 'react-router-dom';
+import { memo } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const defaultTheme = createTheme();
 
-export default function WelcomePage() {
+function WelcomePage() {
+    const navigate = useNavigate(); 
     if (localStorage.getItem('token')) {
-        return <Navigate replace to="/home" />;
+        navigate('/home');
     }
 
     return (
@@ -31,8 +33,8 @@ export default function WelcomePage() {
                                 : t.palette.grey[900],
                         backgroundSize: 'cover',
                         height: '100vh',
-                        margin: 0, // Remove default margins
-                        padding: 0, // Remove default padding
+                        margin: 0,
+                        padding: 0,
                     }}
                 >
                     <Grid
@@ -44,7 +46,7 @@ export default function WelcomePage() {
                             flexDirection: 'column',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            backgroundColor: 'rgba(255,255,255,0.7)', // Adjust opacity or use a separate color
+                            backgroundColor: 'rgba(255,255,255,0.7)',
                             padding: '20px',
                         }}
                     >
@@ -89,3 +91,5 @@ export default function WelcomePage() {
         </>
     );
 }
+
+export default memo(WelcomePage);

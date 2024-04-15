@@ -1,25 +1,80 @@
 import { ThemeProvider } from '@emotion/react';
-import { Grid, CssBaseline, createTheme, Typography } from '@mui/material';
+import {
+    Grid,
+    CssBaseline,
+    createTheme,
+    Typography,
+    Box,
+    List,
+    Fab,
+    Divider,
+} from '@mui/material';
 import Button from '@mui/material/Button';
-import { Link, Navigate, redirect } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { useEffect } from 'react';
-import { getUserRequest } from '../../store/reducers/userReducer';
-import { userApi } from '../../Services/UserService';
+import { memo, useEffect, useState } from 'react';
 import { logout } from '../../store/reducers/tokenReducer';
+import {
+    deleteBoardRequest,
+    getBoardsRequest,
+    getBoardRequest,
+    postBoardRequest,
+    putBoardRequest,
+} from '../../store/reducers/boardReducer';
+import AddIcon from '@mui/icons-material/Add';
+import { IBoardModel } from '../../Models/BoardModel';
+import MyModal from '../MyModal/MyModal';
+import Board from '../Board/Board';
 
-export default function Home() {
+function Home() {
+    const [openCreate, setOpenCreate] = useState(false);
+    const [openEdit, setOpenEdit] = useState(false);
+    const [currentItem, setCurrentItem] = useState('');
+
     const username = useAppSelector((state) => state.user.username);
+    const boards = useAppSelector((state) => state.board.boards);
+
     const dispatch = useAppDispatch();
     const defaultTheme = createTheme();
-    if (!localStorage.getItem('token')) {
-        return <Navigate replace to="/" />;
-    }
+    const navigate = useNavigate();
 
+    useEffect(() => {
+        dispatch(getBoardsRequest());
+    }, []);
+
+    if (!localStorage.getItem('token')) {
+        navigate('/');
+    }
+    const handleClose = () => {
+        setOpenCreate(false);
+        setOpenEdit(false);
+    };
     function handleClick() {
         dispatch(logout());
-        return redirect('/');
+        return navigate('/');
     }
+    const handleEdit = (board_id: string) => {
+        setCurrentItem(board_id);
+        setOpenEdit(true);
+    };
+    const handleUpdate = (newTitle: string) => {
+        setOpenEdit(false);
+        dispatch(putBoardRequest({ id: currentItem, title: newTitle }));
+    };
+    const handleRemove = (board_id: string) => {
+        dispatch(deleteBoardRequest(board_id));
+    };
+    const handleAdd = () => {
+        setOpenCreate(true);
+    };
+    const handleCreate = (title: string) => {
+        setOpenCreate(false);
+        dispatch(postBoardRequest({ title }));
+    };
+    const handleViewBoard = (board: IBoardModel) => {
+        dispatch(getBoardRequest(board.id));
+        return navigate(`/boards/${board.id}`);
+    };
 
     return (
         <>
@@ -50,7 +105,7 @@ export default function Home() {
                             flexDirection: 'column',
                             justifyContent: 'start',
                             alignItems: 'center',
-                            backgroundColor: 'rgba(255,255,255,0.7)', // Adjust opacity or use a separate color
+                            backgroundColor: 'rgba(255,255,255,0.7)',
                             padding: '20px',
                         }}
                     >
@@ -70,9 +125,61 @@ export default function Home() {
                         <Typography component="h1" variant="h3" gutterBottom>
                             Hello, {username} !
                         </Typography>
+                        <Box
+                            sx={{
+                                width: '100%',
+                                maxWidth: 360,
+                                bgcolor: 'background.paper',
+                            }}
+                        >
+                            <List
+                                sx={{
+                                    width: '100%',
+                                    maxWidth: 360,
+                                    bgcolor: 'background.paper',
+                                }}
+                            >
+                                <Divider />
+                                {boards?.map((board) => (
+                                    <Board board={board} handleEdit={handleEdit} handleViewBoard={handleViewBoard} handleRemove={handleRemove}/>
+                                ))}
+                                <Divider />
+                            </List>
+                        </Box>
+                        <Box>
+                            <Fab
+                                variant="extended"
+                                color="primary"
+                                aria-label="add"
+                                onClick={handleAdd}
+                            >
+                                <AddIcon />
+                                Create new board
+                            </Fab>
+                        </Box>
                     </Grid>
                 </Grid>
             </ThemeProvider>
+            <MyModal
+                open={openCreate}
+                onCloseHandler={handleClose}
+                modalTitle="Add new board"
+                modalDescription="Please type in a board title below:"
+                onClickHandler={handleCreate}
+                formPlaceholder="write a title for board here"
+                formButton='Create'
+            />
+            <MyModal
+                open={openEdit}
+                onCloseHandler={handleClose}
+                modalTitle="Edit board"
+                modalDescription="Please type in a new board title below:"
+                onClickHandler={handleUpdate}
+                formPlaceholder="write a new title for board here"
+                formButton='Edit'
+            />
         </>
     );
 }
+
+export default memo(Home);

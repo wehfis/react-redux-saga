@@ -12,9 +12,10 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { IUserDto } from '../../Dtos/UserDto';
 import { Alert, Snackbar } from '@mui/material';
-import { Navigate, redirect } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { registerRequest } from '../../store/reducers/tokenReducer';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { memo } from 'react';
 
 function Copyright(props: any) {
     return (
@@ -36,7 +37,7 @@ function Copyright(props: any) {
 
 const defaultTheme = createTheme();
 
-export default function SignUpSide() {
+function SignUpSide() {
     const [alert, setAlert] = React.useState<{
         severity: 'success' | 'error' | 'info';
         message: string;
@@ -44,6 +45,7 @@ export default function SignUpSide() {
     const [open, setOpen] = React.useState(false);
     const dispatch = useAppDispatch();
     const username = useAppSelector(state => state.user.username);
+    const navigate = useNavigate();
 
     const handleClick = () => {
         setOpen(true);
@@ -67,13 +69,10 @@ export default function SignUpSide() {
             password: data.get('password')! as string,
         };
         dispatch(registerRequest(user.username, user.password));
-        if (username) {
-            return redirect('/home');
-        }
     };
-
+    
     if (localStorage.getItem('token')) {
-        return <Navigate replace to="/home" />;
+        navigate('/home');
     }
 
     return (
@@ -186,3 +185,5 @@ export default function SignUpSide() {
         </ThemeProvider>
     );
 }
+
+export default memo(SignUpSide);

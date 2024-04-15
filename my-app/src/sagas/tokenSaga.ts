@@ -6,16 +6,18 @@ import {
 } from '../store/reducers/tokenReducer';
 import { IUserResult, authApi } from '../Services/AuthService';
 import { IUserDto } from '../Dtos/UserDto';
+import { getUserRequest } from '../store/reducers/userReducer';
 
 function* login(action: { type: ITokenActionType, payload: IUserDto }) {
     try {
+        yield put(getUserRequest());
         const { username, password } = action.payload;
         const response: IUserResult = yield call(authApi.login, { username, password });
         if (response.success) {
             yield put(authSuccess(response.accessToken!, response.refreshToken!));
-          } else {
+        } else {
             yield put(authFailure(response.message));
-          }
+        }
     } catch (error: any) {
         yield put(authFailure(error.message));
     }
@@ -23,6 +25,7 @@ function* login(action: { type: ITokenActionType, payload: IUserDto }) {
 
 function* register(action: { type: ITokenActionType, payload: IUserDto }) {
     try {
+        yield put(getUserRequest());
         const { username, password } = action.payload;
         const response: IUserResult = yield call(authApi.register, { username, password });
         if (response.success) {

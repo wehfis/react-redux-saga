@@ -13,10 +13,8 @@ class BoardService {
     async getAllBoards(): Promise<IBoardModel[]> {
         try {
             const boardData = await api.get<IBoardModel[]>('/boards');
-            console.log(boardData.data);
             return boardData.data;
         } catch (error: any) {
-            console.log(error.message);
             throw new Error(error.message);
         }
     }
@@ -24,10 +22,8 @@ class BoardService {
     async getBoard(id: string): Promise<IBoardModel> {
         try {
             const boardData = await api.get<IBoardModel>(`/board/${id}`);
-            console.log(boardData.data);
             return boardData.data;
         } catch (error: any) {
-            console.log(error.message);
             throw new Error(error.message);
         }
     }
@@ -37,10 +33,8 @@ class BoardService {
                 `/board`,
                 board
             );
-            console.log(boardData.data);
             return boardData.data;
         } catch (error: any) {
-            console.log(error.message);
             throw new Error(error.message);
         }
     }
@@ -53,10 +47,8 @@ class BoardService {
                 `/board/${board_id}`,
                 newBoard
             );
-            console.log(boardData.data);
             return boardData.data;
         } catch (error: any) {
-            console.log(error.message);
             throw new Error(error.message);
         }
     }
@@ -65,10 +57,8 @@ class BoardService {
             const boardData = await api.delete<boolean>(
                 `/board/${board_id}`
             );
-            console.log(boardData.data);
             return boardData.data;
         } catch (error: any) {
-            console.log(error.message);
             throw new Error(error.message);
         }
     }

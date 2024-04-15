@@ -3,7 +3,7 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import { Navigate, redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
@@ -15,7 +15,7 @@ import { IUserDto } from '../../Dtos/UserDto';
 import { Alert, Snackbar } from '@mui/material';
 import { loginRequest } from '../../store/reducers/tokenReducer';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { useSelector } from 'react-redux';
+import { memo } from 'react';
 
 function Copyright(props: any) {
     return (
@@ -37,7 +37,7 @@ function Copyright(props: any) {
 
 const defaultTheme = createTheme();
 
-export default function SignInSide() {
+function SignInSide() {
     const [alert, setAlert] = React.useState<{
         severity: 'success' | 'error' | 'info';
         message: string;
@@ -45,6 +45,7 @@ export default function SignInSide() {
     const [open, setOpen] = React.useState(false);
     const dispatch = useAppDispatch();
     const username = useAppSelector(state => state.user.username);
+    const navigate = useNavigate();
 
     const handleClick = () => {
         setOpen(true);
@@ -67,16 +68,11 @@ export default function SignInSide() {
             username: data.get('email')! as string,
             password: data.get('password')! as string,
         };
-        dispatch(loginRequest(user.username, user.password));
-        console.log('login', username);
-        if (username) {
-            console.log('username', username);
-            return redirect('/home');
-        }
+        await dispatch(loginRequest(user.username, user.password));
     };
 
     if (localStorage.getItem('token')) {
-        return <Navigate replace to="/home" />;
+        navigate('/home');
     }
 
     return (
@@ -189,3 +185,5 @@ export default function SignInSide() {
         </ThemeProvider>
     );
 }
+
+export default memo(SignInSide);

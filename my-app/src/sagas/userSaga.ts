@@ -9,9 +9,7 @@ import { IUserModel } from '../Models/UserModel';
 
 function* getUser() {
     try {
-        console.log('saga');
         const response: IUserModel = yield call(userApi.getCurrentUser);
-        console.log(response);
         yield put(successResponse(response.username));
     } catch (error: any) {
         yield put(unauthResponse(error.message));

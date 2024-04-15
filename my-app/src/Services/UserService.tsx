@@ -18,10 +18,9 @@ class UserService {
     async getCurrentUser(): Promise<IUserModel> {
         try {
             const userData = await api.get<IUserModel>('/user/me');
-            console.log(userData.data)
             return userData.data;
         } catch (error: any) {
-            console.log(error.message);
+            localStorage.setItem('token', '');
             throw new Error(error.message);
         }
     }

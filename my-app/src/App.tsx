@@ -5,6 +5,8 @@ import WelcomePage from './components/Welcome/Welcome';
 import Home from './components/Home/Home';
 import { useAppDispatch } from './hooks/redux';
 import { getUserRequest } from './store/reducers/userReducer';
+import BoardPage from './components/Board/BoardPage';
+import { memo } from 'react';
 
 function App() {
   const dispatch = useAppDispatch()  
@@ -16,10 +18,11 @@ function App() {
         <Route path="/" Component={WelcomePage}/>
         <Route path="/register" Component={SignUpSide}/>
         <Route path="/login" Component={SignInSide}/>
-        <Route path="/home" Component={Home}/>
+        <Route path="/home" Component={Home} />
+        <Route path="/boards/:boardId" Component={BoardPage} />
       </Routes>
     </BrowserRouter>
   );
 }
 
-export default App;
+export default memo(App);

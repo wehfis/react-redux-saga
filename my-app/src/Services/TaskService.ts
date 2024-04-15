@@ -15,10 +15,8 @@ class TaskService {
             const taskData = await api.get<ITaskModel[]>(
                 `/tasks/${board_id}`
             );
-            console.log(taskData.data);
             return taskData.data;
         } catch (error: any) {
-            console.log(error.message);
             throw new Error(error.message);
         }
     }
@@ -28,10 +26,8 @@ class TaskService {
             const taskData = await api.get<ITaskModel>(
                 `/task/${id}`
             );
-            console.log(taskData.data);
             return taskData.data;
         } catch (error: any) {
-            console.log(error.message);
             throw new Error(error.message);
         }
     }
@@ -41,10 +37,8 @@ class TaskService {
                 `/task`,
                 task
             );
-            console.log(taskData.data);
             return taskData.data;
         } catch (error: any) {
-            console.log(error.message);
             throw new Error(error.message);
         }
     }
@@ -57,10 +51,8 @@ class TaskService {
                 `/task/${task_id}`,
                 newTask
             );
-            console.log(taskData.data);
             return taskData.data;
         } catch (error: any) {
-            console.log(error.message);
             throw new Error(error.message);
         }
     }
@@ -69,10 +61,8 @@ class TaskService {
             const taskData = await api.delete<boolean>(
                 `/task/${task_id}`
             );
-            console.log(taskData.data);
             return taskData.data;
         } catch (error: any) {
-            console.log(error.message);
             throw new Error(error.message);
         }
     }
