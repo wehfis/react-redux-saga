@@ -10,9 +10,7 @@ import {
 import { ICategoryModel } from '../Models/CategoryModel';
 import { categoryApi } from '../Services/CategoryService';
 import { ICategoryDto } from '../Dtos/CategoryDto';
-import { useAppSelector } from '../hooks/redux';
 
-const board = useAppSelector(state => state.board.board);
 
 function* getCategories(action: { type: ICategoryActionType, payload: string }) {
     try {
@@ -34,9 +32,6 @@ function* createCategory(action: { type: ICategoryActionType, payload: ICategory
     try {
         const response: ICategoryModel = yield call(categoryApi.createCategory, action.payload);
         yield put(successResponseSingle(response));
-        if (board?.id) {
-            yield call(getCategoriesRequest, board.id);
-        }
     } catch (error: any) {
         yield put(errorResponse(error.message));
     }
@@ -45,9 +40,6 @@ function* deleteCategory(action: { type: ICategoryActionType, payload: string })
     try {
         const response: boolean = yield call(categoryApi.deleteCategory, action.payload);
         yield put(successResponseDelete(response));
-        if (board?.id) {
-            yield call(getCategoriesRequest, board.id);
-        }
     } catch (error: any) {
         yield put(errorResponse(error.message));
     }
@@ -56,9 +48,6 @@ function* editCategory(action: { type: ICategoryActionType, payload: ICategoryMo
     try {
         const response: ICategoryModel = yield call(categoryApi.updateCategory, { name: action.payload.name, board_id: action.payload.board_id } as ICategoryDto, action.payload.id);
         yield put(successResponseSingle(response));
-        if (board?.id) {
-            yield call(getCategoriesRequest, board.id);
-        }
     } catch (error: any) {
         yield put(errorResponse(error.message));
     }

@@ -10,9 +10,6 @@ import {
 import { ITaskModel } from '../Models/TaskModel';
 import { taskApi } from '../Services/TaskService';
 import { ITaskDto } from '../Dtos/TaskDto';
-import { useAppSelector } from '../hooks/redux';
-
-const board = useAppSelector((state) => state.board.board);
 
 function* getTasks(action: { type: ITaskActionType; payload: string }) {
     try {
@@ -43,9 +40,6 @@ function* createTask(action: { type: ITaskActionType; payload: ITaskDto }) {
             action.payload
         );
         yield put(successResponseSingle(response));
-        if (board?.id) {
-            yield call(getTasksRequest, board.id);
-        }
     } catch (error: any) {
         yield put(errorResponse(error.message));
     }
@@ -57,9 +51,6 @@ function* deleteTask(action: { type: ITaskActionType; payload: string }) {
             action.payload
         );
         yield put(successResponseDelete(response));
-        if (board?.id) {
-            yield call(getTasksRequest, board.id);
-        }
     } catch (error: any) {
         yield put(errorResponse(error.message));
     }
@@ -77,9 +68,6 @@ function* editTask(action: { type: ITaskActionType; payload: ITaskModel }) {
             action.payload.id
         );
         yield put(successResponseSingle(response));
-        if (board?.id) {
-            yield call(getTasksRequest, board.id);
-        }
     } catch (error: any) {
         yield put(errorResponse(error.message));
     }
